@@ -4,18 +4,37 @@ let currSelect=0
 let idInitial = 0
 let processing = []
 let complete = []
-let data = []
+
+const filter = document.querySelectorAll('.filter ul li')
+const listFilter = Array.from(filter)    
 
 function handleEvent() {
-    const filter = document.querySelectorAll('.filter ul li')
-    const listFilter = Array.from(filter)    
     listFilter.map((filter, index) => {
         filter.onclick = () =>{
             document.querySelector('.active').classList.remove('active')
             listFilter[index].classList.add('active')
             if (currSelect !== index) {
                 currSelect = index
-                handleRender(data)
+                switch (currSelect) {
+                    case 0 : 
+                        document.querySelector('.list ul').innerHTML = ''
+                        handleRender(data)
+                        break
+                    case 1 : 
+                        let data1 = data.filter((element) =>{
+                            return element.status === 'processing'
+                        })
+                        document.querySelector('.list ul').innerHTML = ''
+                        handleRender(data1)
+                        break
+                    case 2 : 
+                        let data2 = data.filter((element) =>{
+                            return element.status === 'completed'
+                        })
+                        document.querySelector('.list ul').innerHTML = ''
+                        handleRender(data2)
+                        break
+                }
             }
             
         }
@@ -23,34 +42,31 @@ function handleEvent() {
 
 }
 
-function checkboxSelect() {
-    const inputs = document.querySelectorAll('.list input[type="checkbox"]');
 
-    inputs.forEach((input) => {
-        input.addEventListener('change', (event) => {
-            const label = event.target.closest('label');
-            const conten = label.querySelector('p');
-            
 
-            if (event.target.checked) {
-                conten.style.textDecoration = 'line-through';
-                data[input.id] = {
-                    id : input.id,
-                    content : conten.innerText,
-                    status : 'completed',
-                }
-            } else {
-                conten.style.textDecoration = 'none';
-                data[input.id] = {
-                    id : input.id,
-                    content : conten.innerText,
-                    status : 'processed',
-                }
-            }  
+function checkboxSelect(event, id) {
+    
+    const label = event.target.closest('label');
+    const conten = label.querySelector('p');
+    
+
+    if (event.target.checked) {
+        conten.style.textDecoration = 'line-through';
+        data[id] = {
+            id : id,
+            content : conten.innerText,
+            status : 'completed',
+        }
+    } else {
+        conten.style.textDecoration = 'none';
+        data[id] = {
+            id : id,
+            content : conten.innerText,
+            status : 'processing',
+        }
+    }  
             
-            
-        });
-    });
+    
 }
 
 
@@ -69,74 +85,81 @@ function deleteTodo () {
     })
 }
 
+let data = []
 
 function handleAdd() {
     const btnSubmit = document.querySelector('.submit')
     btnSubmit.onclick = () => {
-        const input = document.querySelector('.input-sub')
+        switch(currSelect) {
+            case 0:
+                add()
+                handleRender(data)
+                break
+            case 1:
+                document.querySelector('.active').classList.remove('active')
+                listFilter[0].classList.add('active')
+                add()
+                handleRender(data)
+                break
+            case 2:
+                document.querySelector('.active').classList.remove('active')
+                listFilter[0].classList.add('active')
+                add()
+                handleRender(data)
+                break
+        }
+        
+
+    }
+}
+
+function add() {
+    const input = document.querySelector('.input-sub')
         
         // nhập vào một biến để render ra 1 task vừa nhập
         let task = {
             id : idInitial++,
             content : input.value,
-            status : 'processed'
+            status : 'processing'
         }
-        render(task)
 
         // data toàn dữ liệu 
         data.push(task)
 
         console.log(data)
         input.value = ''  
-        deleteTodo()  
-        checkboxSelect()
-        handleRender(data)
 
-    }
 }
 
 
 // phần render
 
 function handleRender(data) {
-    
-    if ( currSelect === 1) {
-        data.forEach((data) => {
-            if (data.status === 'processed') render(data)
-        })
-            
-    }
-    if ( currSelect === 2) {
-        data.forEach((data) => {
-            if (data.status === 'completed') render(data)
-        })
-    }
-}
-
-function render(data) {
     const todoList = document.querySelector('.list ul')
+    let html = ''
+    data.forEach((element) => {
+        html += `
+        <li>
+            <label for="${element.id}">
+                <input type="checkbox" id="${element.id}" value="" onchange="checkboxSelect(event,${element.id} )">
+                <p class="de-${element.id}">${element.content}</p>
+            </label>
+            <div class="delete " onclick="deleteTodo()" >×</div>
+        </li>
+    `
+    })
+    todoList.innerHTML = html
+    data.forEach((element) =>{
+        if (element.status === 'completed') {
+            let cur = document.querySelector(`.de-${element.id}`)
+            cur.style.textDecoration = 'line-through'
+            let cur2 = document.getElementById(`${element.id}`)
+            cur2.checked = true
 
-    let li = document.createElement('li')
-    let label = document.createElement('label')
-    let input = document.createElement('input')
-    let p = document.createElement('p')
-    let deleteBtn = document.createElement('div')
-
-    label.htmlFor = data.id
-    input.type = 'checkbox'
-    input.id = data.id
-    p.textContent = data.content
-    deleteBtn.textContent = '×'
-    deleteBtn.classList.add('delete')
-
-    label.appendChild(input)
-    label.appendChild(p)
-    li.appendChild(label)
-    li.appendChild(deleteBtn)
-    todoList.appendChild(li)
-
-    input.value = ''
+        }
+    })
 }
+
 
 function start() {
     handleEvent()
