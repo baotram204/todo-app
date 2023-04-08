@@ -1,0 +1,170 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+
+
+html, body {
+    height: 100%;
+    width: 100%;
+    font-size: 18px;
+    color: #fff;
+}
+
+li {
+    list-style-type: none;
+    margin: 10px 0;
+    display: flex;
+    padding: 10px;
+}
+
+
+
+.mar-dot {
+    margin-right: 60%;
+}
+
+.dot-gre,
+.dot-red {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+.dot-gre {
+    background-color: rgb(27, 190, 41);
+}
+
+.dot-red {
+    background-color: red;
+}
+
+.pad-20 {
+    padding: 20px;
+}
+
+.marL-20 {
+    margin-left: 20px;
+}
+
+.active {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+}
+
+
+#main {
+    background-image: url(./imgs/capture_1.gif);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+}
+
+.container {
+    width: 800px;
+    height: 500px;
+    margin: auto;
+    display: flex;
+    border-radius: 25px;
+    border: 1px solid #fff;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.infor {
+    width: 40%;
+    border-right: 2px solid #fff;
+}
+
+.user {
+    height: 100px;
+    border-bottom: 2px solid #fff;
+    display: flex;
+}
+
+.avt {
+    background-image: url(./imgs/avt.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+
+.status {
+    display: flex;
+    margin: 10px 0 ;
+}
+
+
+
+.filter {
+    height: 300px;
+}
+
+.input {
+    display: flex;
+}
+
+.input-sub {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: transparent;
+    outline: none;
+    border: 1px solid #fff;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.submit {
+    padding: 10px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    outline: none;
+    border: 1px solid #fff;
+}
+
+.submit:hover {
+    background-color: #fff;
+
+}
+
+.list {
+    width: 60%;
+}
+
+.list  li { 
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: 1px solid #fff;
+    display: flex;
+    justify-content: space-between;
+}
+
+.list ul {
+    height: 100%;
+    overflow-y: scroll;
+}
+
+.list ul::-webkit-scrollbar {
+    display: none;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.delete {
+    font-size: 30px;
+    cursor: pointer;
+    align-self: center;
+}
