@@ -1,7 +1,5 @@
-
-
 let currSelect=0
-let idInitial = 1
+let idInitial 
 
 let data = JSON.parse(localStorage.getItem("data")) || [
     {
@@ -10,9 +8,13 @@ let data = JSON.parse(localStorage.getItem("data")) || [
       status: undefined,
     },
   ]
+
   
 if (data) {
     handleRender(data)
+    let id = data.length -1
+
+    idInitial = data[id].id + 1
 }
 
 const filter = document.querySelectorAll('.filter ul li')
@@ -136,6 +138,8 @@ function add() {
 
         console.log(data)
         input.value = ''  
+        localStorage.setItem('data', JSON.stringify(data));
+
 
 }
 
