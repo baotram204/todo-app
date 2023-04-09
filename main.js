@@ -2,8 +2,7 @@
 
 let currSelect=0
 let idInitial = 0
-let processing = []
-let complete = []
+let data = []
 
 const filter = document.querySelectorAll('.filter ul li')
 const listFilter = Array.from(filter)    
@@ -76,16 +75,15 @@ function deleteTodo () {
     deleteBtns.forEach((btn) =>{
         btn.onclick = () =>{
             let liCurr = btn.parentElement;
-            let id = liCurr.querySelector('label').htmlFor
-            data.splice(id, 1);
             if(liCurr) {
+                let id = liCurr.querySelector('label').htmlFor
+                data.splice(id, 1);
                 liCurr.remove()
             }
         }
     })
 }
 
-let data = []
 
 function handleAdd() {
     const btnSubmit = document.querySelector('.submit')
@@ -98,12 +96,14 @@ function handleAdd() {
             case 1:
                 document.querySelector('.active').classList.remove('active')
                 listFilter[0].classList.add('active')
+                currSelect = 0
                 add()
                 handleRender(data)
                 break
             case 2:
                 document.querySelector('.active').classList.remove('active')
                 listFilter[0].classList.add('active')
+                currSelect = 0
                 add()
                 handleRender(data)
                 break
@@ -116,7 +116,6 @@ function handleAdd() {
 function add() {
     const input = document.querySelector('.input-sub')
         
-        // nhập vào một biến để render ra 1 task vừa nhập
         let task = {
             id : idInitial++,
             content : input.value,
