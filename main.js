@@ -1,8 +1,21 @@
 
 
 let currSelect=0
-let idInitial = 0
-let data = []
+let idInitial = 1
+// let data = []
+
+let data =  JSON.parse(localStorage.getItem("data")) 
+    || [
+        {
+            id:0,
+            name: undefined,
+            status: undefined,
+        },
+      ]
+
+if (data) {
+    handleRender(data)
+}
 
 const filter = document.querySelectorAll('.filter ul li')
 const listFilter = Array.from(filter)    
@@ -65,6 +78,7 @@ function checkboxSelect(event, id) {
         }
     }  
             
+    localStorage.setItem('data', JSON.stringify(data));
     
 }
 
@@ -74,10 +88,12 @@ function deleteTodo () {
     const deleteBtns = document.querySelectorAll('.delete')
     deleteBtns.forEach((btn) =>{
         btn.onclick = () =>{
+            idInitial--
             let liCurr = btn.parentElement;
             if(liCurr) {
                 let id = liCurr.querySelector('label').htmlFor
                 data.splice(id, 1);
+                localStorage.setItem('data', JSON.stringify(data));
                 liCurr.remove()
             }
         }
@@ -125,6 +141,8 @@ function add() {
         // data toàn dữ liệu 
         data.push(task)
 
+        localStorage.setItem('data', JSON.stringify(data));
+
         console.log(data)
         input.value = ''  
 
@@ -133,19 +151,22 @@ function add() {
 
 // phần render
 
-function handleRender(data) {
+function handleRender(data) {     
     const todoList = document.querySelector('.list ul')
     let html = ''
     data.forEach((element) => {
-        html += `
-        <li>
-            <label for="${element.id}">
-                <input type="checkbox" id="${element.id}" value="" onchange="checkboxSelect(event,${element.id} )">
-                <p class="de-${element.id}">${element.content}</p>
-            </label>
-            <div class="delete " onclick="deleteTodo()" >×</div>
-        </li>
-    `
+        if (element.content !== '' && element.content !== undefined) {
+            html += `
+            <li>
+                <label for="${element.id}">
+                    <input type="checkbox" id="${element.id}" value="" onchange="checkboxSelect(event,${element.id} )">
+                    <p class="de-${element.id}">${element.content}</p>
+                </label>
+                <div class="delete " onclick="deleteTodo()" >×</div>
+            </li>
+            `
+        }
+        
     })
     todoList.innerHTML = html
     data.forEach((element) =>{
