@@ -2,17 +2,15 @@
 
 let currSelect=0
 let idInitial = 1
-// let data = []
 
-let data =  JSON.parse(localStorage.getItem("data")) 
-    || [
-        {
-            id:0,
-            name: undefined,
-            status: undefined,
-        },
-      ]
-
+let data = JSON.parse(localStorage.getItem("data")) || [
+    {
+      id:0,
+      name: undefined,
+      status: undefined,
+    },
+  ]
+  
 if (data) {
     handleRender(data)
 }
@@ -57,47 +55,42 @@ function handleEvent() {
 
 
 function checkboxSelect(event, id) {
-    
     const label = event.target.closest('label');
     const conten = label.querySelector('p');
-    
 
     if (event.target.checked) {
         conten.style.textDecoration = 'line-through';
-        data[id] = {
-            id : id,
-            content : conten.innerText,
-            status : 'completed',
+        data = data.map((todo) => {
+        if (todo.id === id) {
+            return {
+            ...todo,
+            status: 'completed'
+            }
         }
+        return todo
+        })
     } else {
         conten.style.textDecoration = 'none';
-        data[id] = {
-            id : id,
-            content : conten.innerText,
-            status : 'processing',
+        data = data.map((todo) => {
+        if (todo.id === id) {
+            return {
+            ...todo,
+            status: 'processing'
+            }
         }
-    }  
-            
+        return todo
+        })
+    }
+
     localStorage.setItem('data', JSON.stringify(data));
-    
 }
 
 
 
-function deleteTodo () {
-    const deleteBtns = document.querySelectorAll('.delete')
-    deleteBtns.forEach((btn) =>{
-        btn.onclick = () =>{
-            idInitial--
-            let liCurr = btn.parentElement;
-            if(liCurr) {
-                let id = liCurr.querySelector('label').htmlFor
-                data.splice(id, 1);
-                localStorage.setItem('data', JSON.stringify(data));
-                liCurr.remove()
-            }
-        }
-    })
+function deleteTodo (id) {
+    data = data.filter((todo) => todo.id !== id)
+    localStorage.setItem('data', JSON.stringify(data))
+    handleRender(data)
 }
 
 
@@ -141,8 +134,6 @@ function add() {
         // data toàn dữ liệu 
         data.push(task)
 
-        localStorage.setItem('data', JSON.stringify(data));
-
         console.log(data)
         input.value = ''  
 
@@ -162,7 +153,7 @@ function handleRender(data) {
                     <input type="checkbox" id="${element.id}" value="" onchange="checkboxSelect(event,${element.id} )">
                     <p class="de-${element.id}">${element.content}</p>
                 </label>
-                <div class="delete " onclick="deleteTodo()" >×</div>
+                <div class="delete" onclick="deleteTodo(${element.id})" >×</div>
             </li>
             `
         }
