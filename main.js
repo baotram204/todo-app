@@ -1,3 +1,6 @@
+const filter = document.querySelectorAll('.filter ul li')
+const listFilter = Array.from(filter) 
+
 let currSelect=0
 let idInitial 
 
@@ -15,10 +18,7 @@ if (data) {
     let id = data.length -1
 
     idInitial = data[id].id + 1
-}
-
-const filter = document.querySelectorAll('.filter ul li')
-const listFilter = Array.from(filter)    
+}   
 
 function handleEvent() {
     listFilter.map((filter, index) => {
@@ -60,6 +60,7 @@ function checkboxSelect(event, id) {
     const label = event.target.closest('label');
     const conten = label.querySelector('p');
 
+    
     if (event.target.checked) {
         conten.style.textDecoration = 'line-through';
         data = data.map((todo) => {
@@ -82,6 +83,19 @@ function checkboxSelect(event, id) {
         }
         return todo
         })
+    }
+
+    if ( currSelect === 1 && event.target.checked ) {
+        document.querySelector('.active').classList.remove('active')
+        listFilter[2].classList.add('active')
+        currSelect = 2
+        let data2 = data.filter((element) =>{
+            return element.status === 'completed'
+        })
+        document.querySelector('.list ul').innerHTML = ''
+        handleRender(data2)
+        localStorage.setItem('data', JSON.stringify(data2));
+
     }
 
     localStorage.setItem('data', JSON.stringify(data));
